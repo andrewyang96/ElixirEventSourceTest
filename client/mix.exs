@@ -13,14 +13,15 @@ defmodule EsClient.Mixfile do
 
   def application do
     [
-      mod: {EsClient.Application, []},
+      mod: {EsClient, []},
       extra_applications: [:logger]
     ]
   end
 
   defp deps do
     [
-      {:eventsource_ex, "~> 0.0.2"}
+      {:eventsource_ex, "~> 0.0.2"},
+      {:poison, "~> 3.1"}
     ]
   end
 end

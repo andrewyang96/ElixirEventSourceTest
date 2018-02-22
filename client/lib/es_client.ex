@@ -1,4 +1,4 @@
-defmodule EsClient.Application do
+defmodule EsClient do
   use Application
 
   def start(_type, _args) do
@@ -28,11 +28,16 @@ defmodule EsClient.SSE do
       }
     ]
 
-    Supervisor.init(children, strategy: :one_for_one)
+    {:ok, _pid} = Supervisor.start_link(children, strategy: :one_for_one)
+    receive_loop()
   end
 
-  def handle_info(msg) do
-    IO.inspect(msg)
-    {:noreply, %{}}
+  def receive_loop() do
+    receive do
+      msg ->
+        %{"number" => number} = Poison.Parser.parse!(msg.data)
+        IO.puts("Received #{number}")
+        receive_loop()
+    end
   end
 end
